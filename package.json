@@ -1,0 +1,38 @@
+{
+  "name": "office-supplies-management-system",
+  "version": "1.0.0",
+  "description": "Office Supplies Management System (Govt of India) - Node.js, Express, MongoDB, Bootstrap",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "office",
+    "supplies",
+    "management",
+    "system",
+    "express",
+    "mongodb",
+    "bootstrap"
+  ],
+  "author": "Office Supplies Management System Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "5.1.1",
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "4.6.0",
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "helmet": "7.0.0",
+    "mongoose": "^6.13.8",
+    "morgan": "^1.10.1",
+    "pdfkit": "^0.17.2",
+    "uuid": "9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.7"
+  }
+}

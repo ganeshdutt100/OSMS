@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Report Issues - Department Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link href="/public/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="#">Office Supplies Management System</a>
+    <div class="ms-auto">
+      <a class="btn btn-outline-danger" href="/public/html/login.html">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h2 class="mb-4">⚠️ Report Issues</h2>
+  <p class="lead">This is a placeholder page. Department staff will use this page to report problems with supplies or requests.</p>
+
+  <!-- Example form for reporting an issue -->
+  <form id="issueForm" class="mt-4">
+    <div class="mb-3">
+      <label for="issueTitle" class="form-label">Issue Title</label>
+      <input type="text" class="form-control" id="issueTitle" name="issueTitle" placeholder="Short description of the issue" required>
+    </div>
+    <div class="mb-3">
+      <label for="issueDetails" class="form-label">Details</label>
+      <textarea class="form-control" id="issueDetails" name="issueDetails" rows="4" placeholder="Describe the issue in detail" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Issue</button>
+    <a href="/public/html/dept-dashboard.html" class="btn btn-secondary ms-2">Back to Dashboard</a>
+  </form>
+</div>
+
+<!-- Shared JS helpers -->
+<script src="/public/js/app.js"></script>
+<script>
+  // Placeholder handler for issue submission
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('issueForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('issueTitle').value.trim();
+      const details = document.getElementById('issueDetails').value.trim();
+      try {
+        // Call backend API (to be implemented in your controllers/routes)
+        await api('/api/issues', 'POST', { title, details });
+        toast('Issue submitted successfully', 'success');
+        redirect('/public/html/dept-dashboard.html');
+      } catch (err) {
+        toast(err.message, 'danger');
+      }
+    });
+  });
+</script>
+</body>
+</html>
