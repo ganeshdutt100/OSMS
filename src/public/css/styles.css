@@ -73,13 +73,14 @@ body {
 }
 .alert {
   margin-bottom: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Forms */
 .form-label {
   font-weight: 500;
 }
-.form-control, .form-select {
+.form-control,
+.form-select {
   border-radius: 0.375rem;
 }

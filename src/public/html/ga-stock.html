@@ -1,46 +1,202 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>GA Stock - Office Supplies Management System</title>
+  <title>Inventory Hub - OSMS Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom styles -->
-  <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
 
-<!-- Navbar -->
-<nav class="navbar bg-white shadow-sm">
-  <div class="container">
-    <span class="navbar-brand">Office Supplies Management System</span>
-    <div class="ms-auto">
-      <a class="btn btn-outline-dark" href="/html/ga-dashboard.html">Dashboard</a>
-      <button class="btn btn-danger ms-2" id="logoutBtn">Logout</button>
+  <style>
+    :root {
+      --primary: #4facfe;
+      --secondary: #00f2fe;
+      --bg-dark: #070b14;
+      --card-bg: rgba(30, 41, 59, 0.4);
+      --warning-neon: #fff200;
+      --danger-neon: #ff3131;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(0, 242, 254, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(79, 172, 254, 0.1) 0%, transparent 40%);
+      min-height: 100vh;
+      color: white;
+    }
+
+    .navbar-glass {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .inventory-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 30px;
+      padding: 2.5rem;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      margin-top: 2rem;
+    }
+
+    /* 3D Stock Table */
+    .stock-table {
+      color: white !important;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+
+    .stock-table thead th {
+      border: none;
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      padding: 15px 20px;
+    }
+
+    .stock-table tbody tr {
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: default;
+    }
+
+    .stock-table tbody tr:hover {
+      transform: scale(1.02) translateZ(15px);
+      background: rgba(79, 172, 254, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(79, 172, 254, 0.2);
+    }
+
+    /* Low Stock Alert Glow */
+    .low-stock-row {
+      border: 1px solid rgba(255, 49, 49, 0.3) !important;
+      box-shadow: inset 0 0 10px rgba(255, 49, 49, 0.1);
+    }
+
+    .stock-table td {
+      padding: 20px !important;
+      border: none !important;
+      vertical-align: middle;
+    }
+
+    .stock-table td:first-child {
+      border-radius: 15px 0 0 15px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: var(--secondary);
+    }
+
+    .stock-table td:last-child {
+      border-radius: 0 15px 15px 0;
+    }
+
+    /* Quantity Badge Style */
+    .qty-badge {
+      padding: 8px 15px;
+      border-radius: 10px;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .qty-critical {
+      color: var(--danger-neon);
+      border-color: var(--danger-neon);
+      text-shadow: 0 0 8px rgba(255, 49, 49, 0.5);
+      animation: pulseDanger 2s infinite;
+    }
+
+    @keyframes pulseDanger {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .uom-tag {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-glass py-3">
+    <div class="container">
+      <span class="navbar-brand fw-800 fs-4"
+        style="background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OSMS
+        <span class="text-info">STOCK-VIEW</span></span>
+      <div class="ms-auto">
+        <a class="btn btn-outline-info btn-sm rounded-pill px-4 me-2" href="/html/ga-dashboard.html">Admin Console</a>
+        <button class="btn btn-danger btn-sm rounded-pill px-4" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-4 px-2">
+      <div>
+        <h2 class="fw-800 mb-0">Warehouse Inventory</h2>
+        <p class="text-white-50 small">Live monitoring of available office supplies</p>
+      </div>
+      <div class="text-end">
+        <span class="badge bg-danger rounded-pill px-3 py-2 small shadow-lg">Low Stock Alerts Active</span>
+      </div>
+    </div>
+
+    <div class="inventory-container">
+      <div class="table-responsive">
+        <table class="table stock-table">
+          <thead>
+            <tr>
+              <th>Asset ID</th>
+              <th>Description</th>
+              <th class="text-center">Available Stock</th>
+              <th>Unit Type</th>
+            </tr>
+          </thead>
+          <tbody id="stockTable">
+            <tr>
+              <td>#IT-PPR-01</td>
+              <td>
+                <div class="fw-bold">A4 Printing Paper (80GSM)</div>
+                <div class="small text-white-50">Stationary</div>
+              </td>
+              <td class="text-center"><span class="qty-badge">450</span></td>
+              <td><span class="uom-tag">Rims</span></td>
+            </tr>
+            <tr class="low-stock-row">
+              <td>#IT-MS-05</td>
+              <td>
+                <div class="fw-bold">Optical Wireless Mouse</div>
+                <div class="small text-white-50">Peripherals</div>
+              </td>
+              <td class="text-center"><span class="qty-badge qty-critical">08</span></td>
+              <td><span class="uom-tag">Units</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container py-4">
-  <h2 class="mb-4">Stock Management</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Item ID</th>
-        <th>Item Name</th>
-        <th>Available Quantity</th>
-        <th>Unit of Measure</th>
-      </tr>
-    </thead>
-    <tbody id="stockTable"></tbody>
-  </table>
-</div>
+  <script src="/js/app.js"></script>
+  <script src="/js/logout.js"></script>
+  <script src="/js/ga-stock.js"></script>
 
-<!-- Scripts -->
-<script src="/js/app.js"></script>
-<script src="/js/logout.js"></script>
-<script src="/js/ga-stock.js"></script>
 </body>
+
 </html>

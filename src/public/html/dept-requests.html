@@ -1,45 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>My Requests - Office Supplies Management System</title>
+  <title>My Records - OSMS Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom styles -->
-  <link href="/css/styles.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap" rel="stylesheet">
 
-<!-- Navbar -->
-<nav class="navbar bg-white shadow-sm">
-  <div class="container">
-    <span class="navbar-brand">Office Supplies Management System</span>
-    <div class="ms-auto">
-      <a class="btn btn-outline-dark" href="/html/dept-dashboard.html">Dashboard</a>
-      <button class="btn btn-danger ms-2" id="logoutBtn">Logout</button>
+  <style>
+    :root {
+      --primary: #4facfe;
+      --secondary: #00f2fe;
+      --bg-dark: #070b14;
+      --card-bg: rgba(30, 41, 59, 0.6);
+      --neon-green: #39ff14;
+      --neon-yellow: #fff200;
+      --neon-red: #ff3131;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 100% 0%, rgba(0, 242, 254, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 0% 100%, rgba(79, 172, 254, 0.1) 0%, transparent 30%);
+      min-height: 100vh;
+      color: white;
+    }
+
+    /* Modern Glass Navbar */
+    .navbar-glass {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 2.5rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+      margin-top: 2rem;
+    }
+
+    /* 3D Cyber Table Style */
+    .cyber-table {
+      color: white !important;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .cyber-table thead th {
+      border: none;
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      padding: 15px;
+    }
+
+    .cyber-table tbody tr {
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .cyber-table tbody tr:hover {
+      transform: scale(1.01) translateZ(10px);
+      background: rgba(79, 172, 254, 0.1);
+      border-color: var(--primary);
+    }
+
+    .cyber-table td {
+      padding: 20px 15px !important;
+      border: none !important;
+      vertical-align: middle;
+    }
+
+    .cyber-table td:first-child {
+      border-radius: 15px 0 0 15px;
+    }
+
+    .cyber-table td:last-child {
+      border-radius: 0 15px 15px 0;
+    }
+
+    /* Neon Status Badges */
+    .badge-neon {
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .status-pending {
+      background: rgba(255, 242, 0, 0.1);
+      color: var(--neon-yellow);
+      border: 1px solid var(--neon-yellow);
+      box-shadow: 0 0 10px rgba(255, 242, 0, 0.2);
+    }
+
+    .status-approved {
+      background: rgba(57, 255, 20, 0.1);
+      color: var(--neon-green);
+      border: 1px solid var(--neon-green);
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+    }
+
+    .status-rejected {
+      background: rgba(255, 49, 49, 0.1);
+      color: var(--neon-red);
+      border: 1px solid var(--neon-red);
+    }
+
+    .time-text {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-glass py-3">
+    <div class="container">
+      <span class="navbar-brand fw-800"
+        style="background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OSMS
+        <span class="text-info">RECORDS</span></span>
+      <div class="ms-auto">
+        <a class="btn btn-outline-info btn-sm rounded-pill px-4 me-2" href="/html/dept-dashboard.html">Dashboard</a>
+        <button class="btn btn-danger btn-sm rounded-pill px-4" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+          <div>
+            <h2 class="fw-800 mb-0">My Supply Requests</h2>
+            <p class="text-white-50 small">Track your department's item history</p>
+          </div>
+          <a href="/html/dept-request.html" class="btn btn-primary rounded-4 px-4 py-2 shadow-lg">+ New Request</a>
+        </div>
+
+        <div class="table-container shadow-2xl">
+          <div class="table-responsive">
+            <table class="table cyber-table">
+              <thead>
+                <tr>
+                  <th>Items & Description</th>
+                  <th>Current Status</th>
+                  <th>Time-stamp</th>
+                </tr>
+              </thead>
+              <tbody id="requestsTable">
+                <tr>
+                  <td>
+                    <div class="fw-bold">A4 Paper, Log-Books</div>
+                    <div class="small text-white-50">ID: REQ-9921</div>
+                  </td>
+                  <td><span class="badge-neon status-pending">In Review</span></td>
+                  <td class="time-text">Oct 24, 2025 • 10:30 AM</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="fw-bold">Wireless Mouse, Keyboards</div>
+                    <div class="small text-white-50">ID: REQ-8840</div>
+                  </td>
+                  <td><span class="badge-neon status-approved">Dispatched</span></td>
+                  <td class="time-text">Oct 20, 2025 • 02:15 PM</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container py-4">
-  <h2 class="mb-4">My Requests</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Items</th>
-        <th>Status</th>
-        <th>Submitted</th>
-      </tr>
-    </thead>
-    <tbody id="requestsTable"></tbody>
-  </table>
-</div>
+  <script src="/js/app.js"></script>
+  <script src="/js/logout.js"></script>
+  <script src="/js/dept-requests.js"></script>
 
-<!-- Scripts -->
-<script src="/js/app.js"></script>
-<script src="/js/logout.js"></script>
-<script src="/js/dept-requests.js"></script>
 </body>
+
 </html>
